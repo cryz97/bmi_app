@@ -13,6 +13,7 @@ class BmiState extends State<Bmi> {
   final TextEditingController _heightController = new TextEditingController();
   final TextEditingController _weightController = new TextEditingController();
   double result = 0;
+  String _resultReading = "";
 
 
   void _calculateBMI(){
@@ -25,6 +26,21 @@ class BmiState extends State<Bmi> {
           (_heightController.text.isNotEmpty || height > 0) &&
             (_weightController.text.isNotEmpty || weight > 0)){
         result = weight / (height * height) * 10000;
+
+        if(double.parse(result.toStringAsFixed(2)) < 18.5){
+          _resultReading = "Underweight";
+
+        }else if(double.parse(result.toStringAsFixed(2)) >= 18.5 && result < 25){
+          _resultReading = "Normal";
+
+        }else if(double.parse(result.toStringAsFixed(2)) >= 25.0 && result < 30){
+          _resultReading = "Overweight";
+
+        }else if(double.parse(result.toStringAsFixed(2)) >= 30.0){
+          _resultReading = "Obese";
+
+        }
+
       }else{
         result = 0;
       }
@@ -99,7 +115,7 @@ class BmiState extends State<Bmi> {
 
                 new Padding(padding: const EdgeInsets.all(7)),
 
-                new Text("BMI: $result",
+                new Text("Your BMI: ${result.toStringAsFixed(2)}",
                 style: new TextStyle(
                   color: Colors.blueAccent,
                   fontWeight: FontWeight.w300,
@@ -109,7 +125,7 @@ class BmiState extends State<Bmi> {
                 
                 new Padding(padding: const EdgeInsets.all(7)),
 
-                new Text("Overweight",
+                new Text("$_resultReading",
                   style: new TextStyle(
                       color: Colors.pinkAccent,
                       fontWeight: FontWeight.w500,
