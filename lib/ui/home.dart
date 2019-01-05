@@ -11,7 +11,25 @@ class BmiState extends State<Bmi> {
 
   final TextEditingController _ageController = new TextEditingController();
   final TextEditingController _heightController = new TextEditingController();
-  final TextEditingController _weighteController = new TextEditingController();
+  final TextEditingController _weightController = new TextEditingController();
+  double result = 0;
+
+
+  void _calculateBMI(){
+    setState(() {
+      int age = int.parse(_ageController.text);
+      double height = double.parse(_heightController.text);
+      double weight = double.parse(_weightController.text);
+
+      if((_ageController.text.isNotEmpty || age > 0) &&
+          (_heightController.text.isNotEmpty || height > 0) &&
+            (_weightController.text.isNotEmpty || weight > 0)){
+        result = weight / (height * height) * 10000;
+      }else{
+        result = 0;
+      }
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -39,7 +57,7 @@ class BmiState extends State<Bmi> {
               child: new Column(
                 children: <Widget>[
                   new TextField(
-                    controller: null,
+                    controller: _ageController,
                     keyboardType: TextInputType.number,
                     decoration: new InputDecoration(
                         labelText: "Age",
@@ -47,26 +65,26 @@ class BmiState extends State<Bmi> {
                         icon: new Icon(Icons.person_outline)),
                   ),
                   new TextField(
-                    controller: null,
+                    controller: _heightController,
                     keyboardType: TextInputType.number,
                     decoration: new InputDecoration(
-                        labelText: "Height in ft",
-                        hintText: "ex: 65",
+                        labelText: "Height in cm",
+                        hintText: "ex: 190",
                         icon: new Icon(Icons.insert_chart)),
                   ),
                   new TextField(
-                    controller: null,
+                    controller: _weightController,
                     keyboardType: TextInputType.number,
                     decoration: new InputDecoration(
-                        labelText: "Weight in lbs",
-                        hintText: "ex: 180",
+                        labelText: "Weight in kg",
+                        hintText: "ex: 90",
                         icon: new Icon(Icons.line_weight)),
                   ),
                   new Padding(padding: new EdgeInsets.all(15)),
                   new Container(
                     alignment: Alignment.center,
                     child: new RaisedButton(
-                      onPressed: null,
+                      onPressed: _calculateBMI,
                       color: Colors.pinkAccent,
                       child: new Text("Calculate"),
                       textColor: Colors.white,
@@ -81,7 +99,7 @@ class BmiState extends State<Bmi> {
 
                 new Padding(padding: const EdgeInsets.all(7)),
 
-                new Text("BMI: ",
+                new Text("BMI: $result",
                 style: new TextStyle(
                   color: Colors.blueAccent,
                   fontWeight: FontWeight.w300,
